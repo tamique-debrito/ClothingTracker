@@ -31,7 +31,14 @@ namespace ClothingTracker.Models
         [StringLength(30, MinimumLength = 3)]
         [Column(TypeName = "nchar(30)")]
         [Required]
-        public string? Name { get; set; }
+        public required string Name { get; set; }
+
+
+        [StringLength(1000)]
+        [Column(TypeName = "nvarchar(1000)")]
+        [Display(Name = "Detailed Description")]
+        [DataType(DataType.MultilineText)]
+        public string? DetailedDescription { get; set; }
 
         public ClothingType Type { get; set; }
 

@@ -23,6 +23,7 @@ namespace ClothingTracker.Models
                         Name = "Greyish-Black Jeans",
                         Type = ClothingType.Pants,
                         Color = SimpleClothingColor.Black,
+                        DetailedDescription = "Jeans with a grainy texture",
                         WearsBeforeWash = 3,
                         TotalWears = 0,
                     },
@@ -32,6 +33,7 @@ namespace ClothingTracker.Models
                         Name = "White T-shirt",
                         Type = ClothingType.Shirt,
                         Color = SimpleClothingColor.White,
+                        DetailedDescription = "A plain, white T-shirt. Nothing special",
                         WearsBeforeWash = 1,
                         TotalWears = 0,
                     }

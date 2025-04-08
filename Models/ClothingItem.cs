@@ -37,7 +37,6 @@ namespace ClothingTracker.Models
         [StringLength(1000)]
         [Column(TypeName = "nvarchar(1000)")]
         [Display(Name = "Detailed Description")]
-        [DataType(DataType.MultilineText)]
         public string? DetailedDescription { get; set; }
 
         public ClothingType Type { get; set; }
@@ -45,7 +44,8 @@ namespace ClothingTracker.Models
         public SimpleClothingColor Color { get; set; }
 
         [Display(Name = "Wears Before Wash")]
-        public int? WearsBeforeWash { get; set; }
+        [Required]
+        public int WearsBeforeWash { get; set; }
 
         [Display(Name = "Wears Remaining Until Wash Needed")]
         public int? WearsRemaining { get; set; }

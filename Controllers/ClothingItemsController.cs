@@ -81,7 +81,7 @@ namespace ClothingTracker.Controllers
         // More info about Bind: http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Type,Color,WearsBeforeWash")] ClothingItem clothingItem)
+        public async Task<IActionResult> Create([Bind("Id,Name,Type,Color,DetailedDescription,WearsBeforeWash")] ClothingItem clothingItem)
         {
             if (ModelState.IsValid)
             {
@@ -146,7 +146,7 @@ namespace ClothingTracker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Type,Color")] ClothingItem clothingItem)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Type,DetailedDescription,Color")] ClothingItem clothingItem)
         {
             if (id != clothingItem.Id)
             {

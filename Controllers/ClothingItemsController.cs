@@ -20,7 +20,7 @@ namespace ClothingTracker.Controllers
         }
 
     // GET: ClothingItems
-    public async Task<IActionResult> Index(ClothingType? clothingTypes = null, string? searchString = null)
+    public async Task<IActionResult> Index(ClothingType? searchType = null, string? searchString = null)
     {
         if (_context.ClothingItem == null)
         {
@@ -39,14 +39,14 @@ namespace ClothingTracker.Controllers
             clothingItems = clothingItems.Where(s => s.Name!.ToUpper().Contains(searchString.ToUpper()));
         }
 
-        if (clothingTypes != null)
+        if (searchType != null)
         {
-            clothingItems = clothingItems.Where(x => x.Type == clothingTypes);
+            clothingItems = clothingItems.Where(x => x.Type == searchType);
         }
 
         var clothingTypeVM = new ClothingTypeViewModel
         {
-            ClothingTypes = new SelectList(await typeQuery.Distinct().ToListAsync()),
+            SearchType = searchType,
             ClothingItems = await clothingItems.ToListAsync()
         };
 

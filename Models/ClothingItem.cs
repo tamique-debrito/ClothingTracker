@@ -47,7 +47,7 @@ namespace ClothingTracker.Models
         [Required]
         public int WearsBeforeWash { get; set; }
 
-        [Display(Name = "Wears Remaining Until Wash Needed")]
+        [Display(Name = "Wears Until Next Wash")]
         public int? WearsRemaining { get; set; }
 
         [Display(Name = "Total Times Worn")]

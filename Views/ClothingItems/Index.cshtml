@@ -9,8 +9,8 @@
 <form asp-controller="ClothingItems" asp-action="Index" method="get">
     <p>
 
-        <label>Clothing Type:
-            <select asp-for="ClothingTypes" asp-items="Html.GetEnumSelectList<ClothingType>()">
+        <label> Clothing Type:
+            <select asp-for="SearchType" asp-items="Html.GetEnumSelectList<ClothingType>()">
 				    <option value="">All</option>
             </select>
 		</label>

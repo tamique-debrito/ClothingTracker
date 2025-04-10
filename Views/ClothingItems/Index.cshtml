@@ -8,12 +8,17 @@
 
 <form asp-controller="ClothingItems" asp-action="Index" method="get">
     <p>
-
         <label> Clothing Type:
-            <select asp-for="SearchType" asp-items="Html.GetEnumSelectList<ClothingType>()">
+            <select asp-for="SearchTypeSelection" asp-items="Html.GetEnumSelectList<ClothingType>()">
 				    <option value="">All</option>
             </select>
-		</label>
+        </label>
+        <label>
+            Clothing Colors:
+            <select asp-for="SearchColorSelections" asp-items="Html.GetEnumSelectList<SimpleClothingColor>()" class="dropdown" size="3">
+                <option value="">All</option>
+            </select>
+        </label>
         <label>Title: <input type="text" asp-for="SearchString" /></label>
         <input type="submit" value="Filter" />
     </p>

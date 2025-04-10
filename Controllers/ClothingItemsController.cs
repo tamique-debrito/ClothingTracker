@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -19,39 +15,44 @@ namespace ClothingTracker.Controllers
             _context = context;
         }
 
-    // GET: ClothingItems
-    public async Task<IActionResult> Index(ClothingType? searchType = null, string? searchString = null)
-    {
-        if (_context.ClothingItem == null)
+        // GET: ClothingItems
+        public async Task<IActionResult> Index(ClothingType? searchTypeSelection = null, List<SimpleClothingColor>? searchColorSelections = null, string? searchString = null)
         {
-            return Problem("Entity set 'ClothingTracker.ClothingItem' is null.");
+            if (_context.ClothingItem == null)
+            {
+                return Problem("Entity set 'ClothingTracker.ClothingItem' is null.");
+            }
+
+            var clothingItems = from m in _context.ClothingItem
+                         select m;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                clothingItems = clothingItems.Where(s => s.Name!.ToUpper().Contains(searchString.ToUpper()));
+            }
+
+            if (searchTypeSelection != null)
+            {
+                clothingItems = clothingItems.Where(x => x.Type == searchTypeSelection);
+            }
+
+            if (searchColorSelections != null & searchColorSelections.Count > 0)
+            {
+                clothingItems = clothingItems.Where(x => searchColorSelections.Contains(x.Color));
+            }
+
+            var colorSelectList = new SelectList(Enum.GetValues(typeof(SimpleClothingColor)).Cast<SimpleClothingColor>().ToList());
+
+            var clothingTypeVM = new ClothingTypeViewModel
+            {
+                SearchTypeSelection = searchTypeSelection,
+                SearchColorSelections = searchColorSelections,
+                SearchColorOptions = colorSelectList,
+                ClothingItems = await clothingItems.ToListAsync()
+            };
+
+            return View(clothingTypeVM);
         }
-
-        // Use LINQ to get list of types.
-        IQueryable<ClothingType> typeQuery = (from m in _context.ClothingItem
-                                        orderby m.Type
-                                        select m.Type);
-        var clothingItems = from m in _context.ClothingItem
-                     select m;
-
-        if (!string.IsNullOrEmpty(searchString))
-        {
-            clothingItems = clothingItems.Where(s => s.Name!.ToUpper().Contains(searchString.ToUpper()));
-        }
-
-        if (searchType != null)
-        {
-            clothingItems = clothingItems.Where(x => x.Type == searchType);
-        }
-
-        var clothingTypeVM = new ClothingTypeViewModel
-        {
-            SearchType = searchType,
-            ClothingItems = await clothingItems.ToListAsync()
-        };
-
-        return View(clothingTypeVM);
-    }
 
         // GET: ClothingItems/Details/5
         public async Task<IActionResult> Details(int? id)

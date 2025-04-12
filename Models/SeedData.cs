@@ -24,6 +24,7 @@ namespace ClothingTracker.Models
                         Type = ClothingType.Pants,
                         Color = SimpleClothingColor.Black,
                         DetailedDescription = "Jeans with a grainy texture",
+                        WashType = WashType.NumberOfWears,
                         WearsBeforeWash = 3,
                         TotalWears = 0,
                     },
@@ -34,6 +35,18 @@ namespace ClothingTracker.Models
                         Type = ClothingType.Shirt,
                         Color = SimpleClothingColor.White,
                         DetailedDescription = "A plain, white T-shirt. Nothing special",
+                        WashType = WashType.NumberOfWears,
+                        WearsBeforeWash = 1,
+                        TotalWears = 0,
+                    },
+
+                    new ClothingItem
+                    {
+                        Name = "Grey T-shirt",
+                        Type = ClothingType.Shirt,
+                        Color = SimpleClothingColor.Grey,
+                        DetailedDescription = "",
+                        WashType = WashType.NumberOfWears,
                         WearsBeforeWash = 1,
                         TotalWears = 0,
                     }

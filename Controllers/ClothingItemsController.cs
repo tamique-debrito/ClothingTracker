@@ -36,7 +36,7 @@ namespace ClothingTracker.Controllers
                 clothingItems = clothingItems.Where(x => x.Type == searchTypeSelection);
             }
 
-            if (searchColorSelections != null & searchColorSelections.Count > 0)
+            if (searchColorSelections != null && searchColorSelections.Count > 0)
             {
                 clothingItems = clothingItems.Where(x => searchColorSelections.Contains(x.Color));
             }
@@ -82,12 +82,11 @@ namespace ClothingTracker.Controllers
         // More info about Bind: http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Type,Color,DetailedDescription,WearsBeforeWash")] ClothingItem clothingItem)
+        public async Task<IActionResult> Create([Bind("Id,Name,Type,Color,DetailedDescription,WearTracking.WearsBeforeWash")] ClothingItem clothingItem)
         {
             if (ModelState.IsValid)
             {
-                clothingItem.WearsRemaining = clothingItem.WearsBeforeWash;
-                clothingItem.TotalWears = 0;
+                clothingItem.Init();
                 _context.Add(clothingItem);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -102,10 +101,9 @@ namespace ClothingTracker.Controllers
         public async Task<IActionResult> MarkWorn(int id)
         {
             var clothingItem = _context.ClothingItem.Find(id);
-            if (clothingItem != null && clothingItem.WearsRemaining > 0)
+            if (clothingItem != null)
             {
-                clothingItem.WearsRemaining--;
-                clothingItem.TotalWears++;
+                clothingItem.MarkWorn();
                 await _context.SaveChangesAsync();
             }
             return RedirectToAction("Index");
@@ -120,7 +118,7 @@ namespace ClothingTracker.Controllers
             var clothingItem = _context.ClothingItem.Find(id);
             if (clothingItem != null)
             {
-                clothingItem.WearsRemaining = clothingItem.WearsBeforeWash;
+                clothingItem.MarkWashed();
                 await _context.SaveChangesAsync();
             }
             return RedirectToAction("Index");

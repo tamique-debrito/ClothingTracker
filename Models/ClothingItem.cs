@@ -1,3 +1,4 @@
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -67,6 +68,16 @@ namespace ClothingTracker.Models
         [Display(Name = "Total Times Worn")]
         public int? TotalWears { get; set; }
 
+        internal void Init() // Initialize the fields that must be filled in on the creation of a new item
+        {
+            WashType = WashType.NumberOfWears; // Hard code this for now
+            // Assumes WearTracking.WearsBeforeWash has been populated
+            if (WashType == WashType.NoWash) { }
+            else if (WashType == WashType.NumberOfWears) { WearsRemaining = WearsBeforeWash; }
+            else if (WashType == WashType.NumberOfDays) { }
+            else { throw new NotImplementedException("Unrecognized wash type"); }
+            TotalWears = 0;
+        }
         public bool NeedsWash() // Whether this clothing item currently needs to be washed
         {
             if (WashType == WashType.NoWash) { return false; }
@@ -91,7 +102,7 @@ namespace ClothingTracker.Models
             if (WashType == WashType.NoWash) { throw new InvalidDataException("A NoWash type should not be marked as washed"); }
             else if (WashType == WashType.NumberOfWears)
             {
-                if (WearsBeforeWash == null) throw new InvalidDataException("A NumberOfWears type needs WearsBeforeWash specified");
+                if (WearsBeforeWash == null) { throw new InvalidDataException("A NumberOfWears type needs WearsBeforeWash specified"); }
                 WearsRemaining = WearsBeforeWash;
             }
             else if (WashType == WashType.NumberOfDays)
@@ -101,16 +112,37 @@ namespace ClothingTracker.Models
             }
             else { throw new NotImplementedException("Unrecognized wash type"); }
         }
-
-        internal void Init()
+        public string NextWashText()
         {
-            WashType = WashType.NumberOfWears; // Hard code this for now
-            // Assumes WearTracking.WearsBeforeWash has been populated
-            if (WashType == WashType.NoWash) { }
-            else if (WashType == WashType.NumberOfWears) { WearsRemaining = WearsBeforeWash; }
-            else if (WashType == WashType.NumberOfDays) { }
+            if (WashType == WashType.NoWash) { return "N/A"; }
+            else if (WashType == WashType.NumberOfWears)
+            {
+                if (WearsBeforeWash == null) { throw new InvalidDataException("A NumberOfWears type needs WearsBeforeWash specified"); } // This kind of validation should be moved somewhere else...
+                else if (WearsBeforeWash > 0)
+                {
+                    return "After " + WearsBeforeWash + " more wears.";
+                }
+                else
+                {
+                    return "Before next use.";
+                }
+            }
+            else if (WashType == WashType.NumberOfDays)
+            {
+                if (NextWashDate == null)
+                {
+                    return "Not in use";
+                }
+                else if (NextWashDate > DateTime.Today)
+                {
+                    return "On " + NextWashDate + ".";
+                }
+                else
+                {
+                    return "Before next use.";
+                }
+            }
             else { throw new NotImplementedException("Unrecognized wash type"); }
-            TotalWears = 0;
         }
     }
 }

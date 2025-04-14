@@ -19,7 +19,8 @@
                 <option value="">All</option>
             </select>
         </label>
-        <label>Title: <input type="text" asp-for="SearchString" /></label>
+        <label>Search by word: <input type="text" asp-for="SearchString" /></label>
+        <label>Only show dirty: <input type="checkbox" asp-for="OnlyShowDirty" /></label>
         <input type="submit" value="Filter" />
     </p>
 </form>

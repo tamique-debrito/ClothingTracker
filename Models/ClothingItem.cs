@@ -130,10 +130,10 @@ namespace ClothingTracker.Models
             if (WashType == WashType.NoWash) { return "N/A"; }
             else if (WashType == WashType.NumberOfWears)
             {
-                if (WearsBeforeWash == null) { throw new InvalidDataException("A NumberOfWears type needs WearsBeforeWash specified"); } // This kind of validation should be moved somewhere else...
-                else if (WearsBeforeWash > 0)
+                if (WearsRemaining == null) { throw new InvalidDataException("A NumberOfWears type needs WearsBeforeWash specified"); } // This kind of validation should be moved somewhere else...
+                else if (WearsRemaining > 0)
                 {
-                    return "After " + WearsBeforeWash + " more wears.";
+                    return "After " + WearsRemaining + " more wears.";
                 }
                 else
                 {

@@ -10,5 +10,6 @@ namespace ClothingTracker.Models
         public List<SimpleClothingColor>? SearchColorSelections { get; set; }
         public SelectList? SearchColorOptions { get; set; }
         public string? SearchString { get; set; }
+        public bool OnlyShowDirty { get; set; }
     }
 }

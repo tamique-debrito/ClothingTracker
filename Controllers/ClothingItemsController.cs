@@ -16,7 +16,7 @@ namespace ClothingTracker.Controllers
         }
 
         // GET: ClothingItems
-        public async Task<IActionResult> Index(ClothingType? searchTypeSelection = null, List<SimpleClothingColor>? searchColorSelections = null, string? searchString = null)
+        public async Task<IActionResult> Index(ClothingType? searchTypeSelection = null, List<SimpleClothingColor>? searchColorSelections = null, string? searchString = null, bool? onlyShowDirty = null)
         {
             if (_context.ClothingItem == null)
             {
@@ -43,12 +43,19 @@ namespace ClothingTracker.Controllers
 
             var colorSelectList = new SelectList(Enum.GetValues(typeof(SimpleClothingColor)).Cast<SimpleClothingColor>().ToList());
 
+            var filteredItems = await clothingItems.ToListAsync();
+
+            if (onlyShowDirty.HasValue && (bool)onlyShowDirty)
+            {
+                filteredItems = filteredItems.Where(x => x.NeedsWash()).ToList();
+            }
+
             var clothingTypeVM = new ClothingTypeViewModel
             {
                 SearchTypeSelection = searchTypeSelection,
                 SearchColorSelections = searchColorSelections,
                 SearchColorOptions = colorSelectList,
-                ClothingItems = await clothingItems.ToListAsync()
+                ClothingItems = filteredItems,
             };
 
             return View(clothingTypeVM);

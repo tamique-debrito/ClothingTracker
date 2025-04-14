@@ -32,7 +32,7 @@ namespace ClothingTracker.Models
                     new ClothingItem
                     {
                         Name = "White T-shirt",
-                        Type = ClothingType.Shirt,
+                        Type = ClothingType.TShirt,
                         Color = SimpleClothingColor.White,
                         DetailedDescription = "A plain, white T-shirt. Nothing special",
                         WashType = WashType.NumberOfWears,
@@ -43,7 +43,7 @@ namespace ClothingTracker.Models
                     new ClothingItem
                     {
                         Name = "Grey T-shirt",
-                        Type = ClothingType.Shirt,
+                        Type = ClothingType.TShirt,
                         Color = SimpleClothingColor.Grey,
                         DetailedDescription = "",
                         WashType = WashType.NumberOfWears,

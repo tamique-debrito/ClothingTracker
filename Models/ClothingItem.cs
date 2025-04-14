@@ -7,9 +7,19 @@ namespace ClothingTracker.Models
 
     public enum ClothingType
     {
-        Shirt = 1,
+        // Regular clothing types
+        TShirt = 1,
         Pants = 2,
         Sweater = 3,
+        CollaredShirt = 4,
+        Coat = 5,
+        Shoes = 6,
+        // Accessory types
+        Hat = 100,
+        Belt = 101,
+        // Non-clothes
+        Towel = 201,
+        Bedsheets = 202,
     }
     public enum SimpleClothingColor
     {
@@ -20,6 +30,9 @@ namespace ClothingTracker.Models
         Green = 5,
         Red = 6,
         Brown = 7,
+        Tan = 8,
+        Purple = 9,
+        Orange = 10,
     }
 
     public enum WashType

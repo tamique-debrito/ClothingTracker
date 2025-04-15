@@ -11,6 +11,7 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
+            @*################ General fields*@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -32,11 +33,23 @@
                 <textarea asp-for="DetailedDescription" class="form-control"></textarea>
                 <span asp-validation-for="DetailedDescription" class="text-danger"></span>
             </div>
+            @*################ Wash tracking fields*@
             <div class="form-group">
+                <label asp-for="WashType" class="control-label">Track wash schedule by</label>
+                <select asp-for="WashType" asp-items="Html.GetEnumSelectList<WashType>()" class="form-control" value="@WashType.NumberOfWears" id="wash-type-input"> </select>
+                <span asp-validation-for="WashType" class="text-danger"></span>
+            </div>
+            <div class="form-group" id="wears-before-wash-field">
                 <label asp-for="WearsBeforeWash" class="control-label"></label>
                 <input asp-for="WearsBeforeWash" class="form-control" />
                 <span asp-validation-for="WearsBeforeWash" class="text-danger"></span>
             </div>
+            <div class="form-group" id="days-before-wash-field" style="display: none;">
+                <label asp-for="DaysBeforeWash" class="control-label"></label>
+                <input asp-for="DaysBeforeWash" class="form-control" />
+                <span asp-validation-for="DaysBeforeWash" class="text-danger"></span>
+            </div>
+            @*################ Submit button*@
             <div class="form-group margin-submit-button">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -49,5 +62,44 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        function setFieldState(fieldId, isShown) {
+            var field = document.getElementById(fieldId);
+            if (isShown) {
+                field.style.display = "block";
+            } else {
+                field.style.display = "none";
+                field.value = null; // Also clear the value
+            }
+        }
+
+        function showFieldsForWashType() {
+            var washType = document.getElementById("wash-type-input").value;
+            var showWears, showDays
+
+            washType = Number(washType); // Need to convert this because the enums can only be brought in as an int
+
+            if (washType === @((int)WashType.NoWash)) {
+                showWears = false;
+                showDays = false;
+            } else if (washType === @((int)WashType.NumberOfWears)) {
+                showWears = true;
+                showDays = false;
+            } else if (washType === @((int)WashType.NumberOfDays)) {
+                showWears = false;
+                showDays = true;
+            } else {
+                throw new Error(`Not implemented: Unrecognized WashType: ${washType}`)
+            }
+            setFieldState("wears-before-wash-field", showWears);
+            setFieldState("days-before-wash-field", showDays);
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("wash-type-input").addEventListener("change", showFieldsForWashType);
+        });
+    </script>
 }

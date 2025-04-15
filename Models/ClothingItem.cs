@@ -38,8 +38,11 @@ namespace ClothingTracker.Models
     public enum WashType
     // Represents how it's determined when a clothing item should be washed
     {
+        [Display(Name = "By number of wears")]
         NumberOfWears = 1,
+        [Display(Name = "By number of days used")]
         NumberOfDays = 2, // This mostly applies to things like bedsheets and towels in kitchen/bathroom.
+        [Display(Name = "Item does not need washing")]
         NoWash = 3, // This mostly applies to things like shoes, hats, and gloves
     }
 
@@ -66,16 +69,19 @@ namespace ClothingTracker.Models
         // ########### Wear Tracking
 
         [Required]
+        [Display(Name = "Wash Type")]
         public WashType WashType { get; set; }
 
-        [Display(Name = "Wears Before Wash")]
+        [Display(Name = "Wears Before Wash Needed")]
         public int? WearsBeforeWash { get; set; }
 
         [Display(Name = "Wears Until Next Wash")]
         public int? WearsRemaining { get; set; }
 
+        [Display(Name = "Days of Use Before Wash Needed")]
         public int? DaysBeforeWash { get; set; }
 
+        [Display(Name = "Date Of Next Wash")]
         public DateTime? NextWashDate { get; set; } // If the clothing item is washed after a certain number of days, the next wash date. Whether this value is null indicates whether the item is currently in use (will need to add extra properties to track multiple interchangeable items actually)
 
         [Display(Name = "Total Times Worn")]
@@ -83,11 +89,10 @@ namespace ClothingTracker.Models
 
         internal void Init() // Initialize the fields that must be filled in on the creation of a new item
         {
-            WashType = WashType.NumberOfWears; // Hard code this for now
             // Assumes WearTracking.WearsBeforeWash has been populated
-            if (WashType == WashType.NoWash) { }
-            else if (WashType == WashType.NumberOfWears) { WearsRemaining = WearsBeforeWash; }
-            else if (WashType == WashType.NumberOfDays) { }
+            if (WashType == WashType.NoWash) { WearsBeforeWash = null; DaysBeforeWash = null; }
+            else if (WashType == WashType.NumberOfWears) { WearsRemaining = WearsBeforeWash; DaysBeforeWash = null; }
+            else if (WashType == WashType.NumberOfDays) { WearsBeforeWash = null; }
             else { throw new NotImplementedException("Unrecognized wash type"); }
             TotalWears = 0;
         }

@@ -89,7 +89,7 @@ namespace ClothingTracker.Controllers
         // More info about Bind: http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Type,Color,DetailedDescription,WearTracking.WearsBeforeWash")] ClothingItem clothingItem)
+        public async Task<IActionResult> Create([Bind("Id,Name,Type,Color,DetailedDescription,WashType,WearsBeforeWash,DaysBeforeWash")] ClothingItem clothingItem) // Maybe don't restrict anything here
         {
             if (ModelState.IsValid)
             {

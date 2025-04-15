@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ClothingTracker.Data;
+using ClothingTracker.Models.Shared;
 
 namespace ClothingTracker.Models
 {
@@ -22,7 +23,7 @@ namespace ClothingTracker.Models
                     {
                         Name = "Greyish-Black Jeans",
                         Type = ClothingType.Pants,
-                        Color = SimpleClothingColor.Black,
+                        Color = SimpleDiscreteColor.Black,
                         DetailedDescription = "Jeans with a grainy texture",
                         WashType = WashType.NumberOfWears,
                         WearsBeforeWash = 3,
@@ -33,7 +34,7 @@ namespace ClothingTracker.Models
                     {
                         Name = "White T-shirt",
                         Type = ClothingType.TShirt,
-                        Color = SimpleClothingColor.White,
+                        Color = SimpleDiscreteColor.White,
                         DetailedDescription = "A plain, white T-shirt. Nothing special",
                         WashType = WashType.NumberOfWears,
                         WearsBeforeWash = 1,
@@ -44,10 +45,21 @@ namespace ClothingTracker.Models
                     {
                         Name = "Grey T-shirt",
                         Type = ClothingType.TShirt,
-                        Color = SimpleClothingColor.Grey,
+                        Color = SimpleDiscreteColor.Grey,
                         DetailedDescription = "",
                         WashType = WashType.NumberOfWears,
                         WearsBeforeWash = 1,
+                        TotalWears = 0,
+                    },
+
+                    new ClothingItem
+                    {
+                        Name = "Tan Towel",
+                        Type = ClothingType.Towel,
+                        Color = SimpleDiscreteColor.Tan,
+                        DetailedDescription = "",
+                        WashType = WashType.NumberOfDays,
+                        DaysBeforeWash = 8,
                         TotalWears = 0,
                     }
                 );

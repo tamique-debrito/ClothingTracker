@@ -1,4 +1,4 @@
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using ClothingTracker.Models.Shared;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -20,19 +20,6 @@ namespace ClothingTracker.Models
         // Non-clothes
         Towel = 201,
         Bedsheets = 202,
-    }
-    public enum SimpleClothingColor
-    {
-        Black = 1,
-        White = 2,
-        Grey = 3,
-        Blue = 4,
-        Green = 5,
-        Red = 6,
-        Brown = 7,
-        Tan = 8,
-        Purple = 9,
-        Orange = 10,
     }
 
     public enum WashType
@@ -64,7 +51,7 @@ namespace ClothingTracker.Models
 
         public ClothingType Type { get; set; }
 
-        public SimpleClothingColor Color { get; set; }
+        public SimpleDiscreteColor Color { get; set; }
 
         // ########### Wear Tracking
 

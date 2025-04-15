@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ClothingTracker.Data;
 using ClothingTracker.Models;
+using ClothingTracker.Models.Shared;
 
 namespace ClothingTracker.Controllers
 {
@@ -16,7 +17,7 @@ namespace ClothingTracker.Controllers
         }
 
         // GET: ClothingItems
-        public async Task<IActionResult> Index(ClothingType? searchTypeSelection = null, List<SimpleClothingColor>? searchColorSelections = null, string? searchString = null, bool? onlyShowDirty = null)
+        public async Task<IActionResult> Index(ClothingType? searchTypeSelection = null, List<SimpleDiscreteColor>? searchColorSelections = null, string? searchString = null, bool? onlyShowDirty = null)
         {
             if (_context.ClothingItem == null)
             {
@@ -41,7 +42,7 @@ namespace ClothingTracker.Controllers
                 clothingItems = clothingItems.Where(x => searchColorSelections.Contains(x.Color));
             }
 
-            var colorSelectList = new SelectList(Enum.GetValues(typeof(SimpleClothingColor)).Cast<SimpleClothingColor>().ToList());
+            var colorSelectList = new SelectList(Enum.GetValues(typeof(SimpleDiscreteColor)).Cast<SimpleDiscreteColor>().ToList());
 
             var filteredItems = await clothingItems.ToListAsync();
 

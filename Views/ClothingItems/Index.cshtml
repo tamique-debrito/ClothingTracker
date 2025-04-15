@@ -1,3 +1,4 @@
+@using ClothingTracker.Models.Shared
 @model ClothingTracker.Models.ClothingTypeViewModel
 
 @{
@@ -15,7 +16,7 @@
         </label>
         <label>
             Clothing Colors:
-            <select asp-for="SearchColorSelections" asp-items="Html.GetEnumSelectList<SimpleClothingColor>()" class="dropdown" size="3">
+            <select asp-for="SearchColorSelections" asp-items="Html.GetEnumSelectList<SimpleDiscreteColor>()" class="dropdown" size="3">
                 <option value="">All</option>
             </select>
         </label>

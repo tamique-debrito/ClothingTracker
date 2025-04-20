@@ -11,7 +11,7 @@
     <p>
         <label> Clothing Type:
             <select asp-for="SearchTypeSelection" asp-items="Html.GetEnumSelectList<ClothingType>()">
-				    <option value="">All</option>
+                <option value="">All</option>
             </select>
         </label>
         <label>
@@ -61,12 +61,18 @@
                     @item.NextWashText()
                 </td>
                 <td>
-                    <form asp-action="MarkWorn" asp-route-id="@item.Id" method="post">
-                        <button type="submit" class="btn btn-danger"><i class="bi bi-check-square"></i> Mark Worn</button>
-                    </form>
-                    <form asp-action="MarkWashed" asp-route-id="@item.Id" method="post">
-                        <button type="submit" class="btn btn-success"><i class="bi bi-droplet"></i> Mark Washed</button>
-                    </form>
+                    @if(item.WashType == WashType.NumberOfWears)
+                    {
+                        <form asp-action="MarkWorn" asp-route-id="@item.Id" method="post">
+                            <button type="submit" class="btn btn-danger"><i class="bi bi-check-square"></i> Mark Worn</button>
+                        </form>
+                    }
+                    @if (item.WashType != WashType.NoWash)
+                    {
+                        <form asp-action="MarkWashed" asp-route-id="@item.Id" method="post">
+                            <button type="submit" class="btn btn-success"><i class="bi bi-droplet"></i> Mark Washed</button>
+                        </form>
+                    }
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
 					<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>

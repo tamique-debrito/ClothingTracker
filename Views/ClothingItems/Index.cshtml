@@ -64,13 +64,25 @@
                     @if(item.WashType == WashType.NumberOfWears)
                     {
                         <form asp-action="MarkWorn" asp-route-id="@item.Id" method="post">
-                            <button type="submit" class="btn btn-danger"><i class="bi bi-check-square"></i> Mark Worn</button>
+                            <button type="submit" class="btn btn-danger"><i class="bi bi-incognito"></i> Mark Worn</button>
                         </form>
                     }
-                    @if (item.WashType != WashType.NoWash)
+                    @if (item.WashType != WashType.NoWash && item.NeedsWash())
                     {
                         <form asp-action="MarkWashed" asp-route-id="@item.Id" method="post">
                             <button type="submit" class="btn btn-success"><i class="bi bi-droplet"></i> Mark Washed</button>
+                        </form>
+                    }
+                    @if (item.WashType == WashType.NumberOfDays && item.NeedsWash() && item.InUse == InUseStatus.InUse)
+                    {
+                        <form asp-action="MarkNotInUse" asp-route-id="@item.Id" method="post">
+                            <button type="submit" class="btn btn-danger"><i class="bi bi-bag-plus"></i> Mark Not In Use</button>
+                        </form>
+                    }
+                    @if (item.WashType == WashType.NumberOfDays && !item.NeedsWash() && item.InUse == InUseStatus.NotInUse)
+                    {
+                        <form asp-action="MarkInUse" asp-route-id="@item.Id" method="post">
+                            <button type="submit" class="btn btn-success"><i class="bi bi-bag-check"></i> Mark In Use</button>
                         </form>
                     }
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |

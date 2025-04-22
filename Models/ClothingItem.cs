@@ -33,6 +33,16 @@ namespace ClothingTracker.Models
         NoWash = 3, // This mostly applies to things like shoes, hats, and gloves
     }
 
+    public enum InUseStatus
+    // Whether the item is "in use" or not. This is used for the "NumberOfDays" wash type to signal whether the item is currently being used (e.g. is the Tan Towel currently on the towel rack in the bathroom)
+    // The correct state change for this use case is (wash date not null, in use) -[mark not in use]> (wash date not null, not in use) -[mark washed]> (wash date null, not in use) -[mark in use]> (wash date not null, in use)
+    {
+        [Display(Name = "In use")]
+        InUse = 1,
+        [Display(Name = "Not in use")]
+        NotInUse = 2,
+    }
+
     public class ClothingItem
     {
         [Key]
@@ -59,6 +69,9 @@ namespace ClothingTracker.Models
         [Display(Name = "Wash Type")]
         public WashType WashType { get; set; }
 
+        [Display(Name = "In Use")]
+        public InUseStatus InUse { get; set; }
+
         [Display(Name = "Wears Before Wash Needed")]
         public int? WearsBeforeWash { get; set; }
 
@@ -74,12 +87,19 @@ namespace ClothingTracker.Models
         [Display(Name = "Total Times Worn")]
         public int? TotalWears { get; set; }
 
+        // Methods
+
+        internal void InitNextWashDate()
+        {
+            NextWashDate = DateTime.Today.AddDays((double)DaysBeforeWash);
+        }
+
         internal void Init() // Initialize the fields that must be filled in on the creation of a new item
         {
             // Assumes WearTracking.WearsBeforeWash has been populated
-            if (WashType == WashType.NoWash) { WearsBeforeWash = null; DaysBeforeWash = null; }
-            else if (WashType == WashType.NumberOfWears) { WearsRemaining = WearsBeforeWash; DaysBeforeWash = null; }
-            else if (WashType == WashType.NumberOfDays) { WearsBeforeWash = null; }
+            if (WashType == WashType.NoWash) { WearsBeforeWash = null; DaysBeforeWash = null; InUse = InUseStatus.InUse; }
+            else if (WashType == WashType.NumberOfWears) { WearsRemaining = WearsBeforeWash; DaysBeforeWash = null; InUse = InUseStatus.InUse;  }
+            else if (WashType == WashType.NumberOfDays) { WearsBeforeWash = null; InUse = InUseStatus.NotInUse; }
             else { throw new NotImplementedException("Unrecognized wash type"); }
             TotalWears = 0;
         }
@@ -93,6 +113,18 @@ namespace ClothingTracker.Models
                 else return NextWashDate <= DateTime.Today;
             }
             else { throw new NotImplementedException("Unrecognized wash type"); }
+        }
+        public void MarkInUse()
+        {
+            InUse = InUseStatus.InUse;
+            if (WashType == WashType.NumberOfDays && NextWashDate == null) 
+            {
+                InitNextWashDate();
+            }
+        }
+        public void MarkNotInUse()
+        {
+            InUse = InUseStatus.NotInUse;
         }
         public void MarkWorn()
         {
@@ -113,7 +145,14 @@ namespace ClothingTracker.Models
             else if (WashType == WashType.NumberOfDays)
             {
                 if (DaysBeforeWash == null) throw new InvalidDataException("A NumberOfDays type needs DaysBeforeWash specified");
-                NextWashDate = DateTime.Today.AddDays((double)DaysBeforeWash);
+                if (InUse == InUseStatus.InUse)
+                {
+                    InitNextWashDate();
+                }
+                else
+                {
+                    NextWashDate = null;
+                }
             }
             else { throw new NotImplementedException("Unrecognized wash type"); }
         }
@@ -123,6 +162,10 @@ namespace ClothingTracker.Models
             else if (WashType == WashType.NumberOfWears)
             {
                 if (WearsRemaining == null) { throw new InvalidDataException("A NumberOfWears type needs WearsBeforeWash specified"); } // This kind of validation should be moved somewhere else...
+                else if (WearsRemaining == 1)
+                {
+                    return "After one more wear.";
+                }
                 else if (WearsRemaining > 0)
                 {
                     return "After " + WearsRemaining + " more wears.";
@@ -140,7 +183,7 @@ namespace ClothingTracker.Models
                 }
                 else if (NextWashDate > DateTime.Today)
                 {
-                    return "On " + NextWashDate + ".";
+                    return "On " + DateOnly.FromDateTime((DateTime)NextWashDate) + ".";
                 }
                 else
                 {

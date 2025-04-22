@@ -132,6 +132,34 @@ namespace ClothingTracker.Controllers
             return RedirectToAction("Index");
         }
 
+        // POST: ClothingItems/MarkNotInUse
+        [HttpPost("MarkNotInUse/{id}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> MarkNotInUse(int id)
+        {
+            var clothingItem = _context.ClothingItem.Find(id);
+            if (clothingItem != null)
+            {
+                clothingItem.MarkNotInUse();
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction("Index");
+        }
+
+        // POST: ClothingItems/MarkInUse
+        [HttpPost("MarkInUse/{id}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> MarkInUse(int id)
+        {
+            var clothingItem = _context.ClothingItem.Find(id);
+            if (clothingItem != null)
+            {
+                clothingItem.MarkInUse();
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction("Index");
+        }
+
         // GET: ClothingItems/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
